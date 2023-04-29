@@ -3,25 +3,34 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../Providers/AuthProvider";
 
 const Login = () => {
-
-  const {signIn}=useContext(AuthContext);
+  const {signInWithGoogle, signIn } = useContext(AuthContext);
 
   const handleLogin = (event) => {
     event.preventDefault();
     const form = event.target;
-    const email =form.email.value;
-    const password=form.password.value;
-    console.log(email,password)
-    signIn(email,password)
-    .then(result=>{
-      const loggedUser=result.user;
-      console.log(loggedUser)
-      form.reset();
+    const email = form.email.value;
+    const password = form.password.value;
+    console.log(email, password);
+    signIn(email, password)
+      .then((result) => {
+        const loggedUser = result.user;
+        console.log(loggedUser);
+        form.reset();
+      })
+      .then((error) => {
+        console.log(error);
+      });
+  };
+  const handleGoogleLogIn = () => {
+    signInWithGoogle()
+    .then((result) => {
+      const loggedUser = result.user;
+      console.log(loggedUser);
     })
-    .then(error=>{
-      console.log(error)
+    .catch(error =>{
+      console.error(error)
     })
-  }
+  };
   return (
     <div className="hero min-h-screen bg-base-200">
       <div className="hero-content flex-col ">
@@ -64,9 +73,13 @@ const Login = () => {
             </div>
           </form>
           <Link to="/register">
-          <button className="btn btn-link">If You new Register now</button>
+            <button className="btn btn-link">If You new Register now</button>
           </Link>
-
+        </div>
+        <div>
+          <button onClick={handleGoogleLogIn} className="btn btn-primary">
+            Google
+          </button>
         </div>
       </div>
     </div>
